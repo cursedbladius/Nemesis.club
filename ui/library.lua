@@ -181,35 +181,44 @@ do --// UI Source
         -- Custom Font
         local CustomFont = { } do
             function CustomFont:New(Name, Weight, Style, Data)
-                if not isfile(Data.Id) then
-                    writefile(Data.Id, game:HttpGet(Data.Url))
-                end
+                local fontObj = nil
+                pcall(function()
+                    if not isfile(Data.Id) or (readfile(Data.Id):sub(1, 4) == "<!DO" or #readfile(Data.Id) < 1000) then
+                        writefile(Data.Id, game:HttpGet(Data.Url))
+                    end
 
-                local Data = {
-                    name = Name,
-                    faces = {
-                        {
-                            name = Name,
-                            weight = Weight,
-                            style = Style,
-                            assetId = getcustomasset(Data.Id)
+                    local fontInfo = {
+                        name = Name,
+                        faces = {
+                            {
+                                name = Name,
+                                weight = Weight,
+                                style = Style,
+                                assetId = getcustomasset(Data.Id)
+                            }
                         }
                     }
-                }
 
-                local FontPath = Library.Directory .. Library.Folders.Assets .. "/" .. Name .. ".font"
-                writefile(FontPath, HttpService:JSONEncode(Data))
-                return Font.new(getcustomasset(FontPath))
+                    local FontPath = Library.Directory .. Library.Folders.Assets .. "/" .. Name .. ".font"
+                    writefile(FontPath, HttpService:JSONEncode(fontInfo))
+                    fontObj = Font.new(getcustomasset(FontPath))
+                end)
+
+                if fontObj then
+                    return fontObj
+                end
+
+                return Font.fromEnum(Enum.Font.SourceSansBold)
             end
 
             Library.Font = CustomFont:New("WindowsXPTAHOMA", 400, "Regular", {
                 Id = "WindowsXPTAHOMA",
-                Url = "https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/windows-xp-tahoma.ttf"
+                Url = "https://raw.githubusercontent.com/sametexe001/luas/main/fonts/windows-xp-tahoma.ttf"
             })
 
             Library.BoldFont = CustomFont:New("Tahoma8PTBOLD", 400, "Regular", {
                 Id = "Tahoma8PTBOLD",
-                Url = "https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/TAHOMA-8PT-BOLD-WINDOWS-XP.TTF"
+                Url = "https://raw.githubusercontent.com/sametexe001/luas/main/fonts/TAHOMA-8PT-BOLD-WINDOWS-XP.TTF"
             })
         end
 
