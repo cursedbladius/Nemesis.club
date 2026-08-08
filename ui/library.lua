@@ -3237,9 +3237,9 @@ do --// UI Source
                         Name = "\0",
                         Parent = Items["Title"].Instance,
                         AnchorPoint = Vector2.new(0, 1),
-                        Position = UDim2.new(0, -8, 1, 2),
-                        Size = UDim2.new(1, 8, 0, 4),
-                        ZIndex = 3,
+                        Position = UDim2.new(0, -8, 1, -2),
+                        Size = UDim2.new(1, 8, 0, 3),
+                        ZIndex = 2,
                         BorderSizePixel = 0,
                         BackgroundColor3 = Library.Theme["Inline"]
                     }):AddToTheme({BackgroundColor3 = 'Inline'})
@@ -3247,19 +3247,9 @@ do --// UI Source
                     Library:Create("Frame", {
                         Name = "\0",
                         Parent = Items["_"].Instance,
-                        Position = UDim2.new(0, 0, 0, 0),
-                        Size = UDim2.new(0, 1, 0, 2),
-                        ZIndex = 4,
-                        BorderSizePixel = 0,
-                        BackgroundColor3 = Library.Theme["Outline 1"]
-                    }):AddToTheme({BackgroundColor3 = 'Outline 1'})
-
-                    Library:Create("Frame", {
-                        Name = "\0",
-                        Parent = Items["_"].Instance,
-                        Position = UDim2.new(0, 0, 0, 0),
-                        Size = UDim2.new(0, 8, 0, 1),
-                        ZIndex = 4,
+                        Position = UDim2.new(0, -1, 0, 0),
+                        Size = UDim2.new(0, 1, 0, 1),
+                        ZIndex = 3,
                         BorderSizePixel = 0,
                         BackgroundColor3 = Library.Theme["Outline 1"]
                     }):AddToTheme({BackgroundColor3 = 'Outline 1'})
