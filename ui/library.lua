@@ -3209,9 +3209,9 @@ do --// UI Source
                         Parent = Items["MainFrame"].Instance,
                         AnchorPoint = Vector2.new(1, 1),
                         BorderSizePixel = 0,
-                        Position = UDim2.new(1, 0, 0, -6),
+                        Position = UDim2.new(1, 2, 0, 0),
                         Size = UDim2.new(0, 0, 0, 21),
-                        ZIndex = 1,
+                        ZIndex = -1,
                         AutomaticSize = Enum.AutomaticSize.X,
                         BackgroundColor3 = Library.Theme["Inline"]
                     }):AddToTheme({BackgroundColor3 = 'Inline'})
@@ -3233,6 +3233,35 @@ do --// UI Source
                         BorderOffset = UDim.new(0, 1)
                     }):AddToTheme({Color = 'Outline 3'})
 
+                    Items["_"] = Library:Create("Frame", {
+                        Name = "\0",
+                        Parent = Items["Title"].Instance,
+                        AnchorPoint = Vector2.new(0, 1),
+                        Position = UDim2.new(0, -8, 1, -2),
+                        Size = UDim2.new(1, 16, 0, 2),
+                        BorderSizePixel = 0,
+                        BackgroundColor3 = Library.Theme["Inline"]
+                    }):AddToTheme({BackgroundColor3 = 'Inline'})
+
+                    Library:Create("Frame", {
+                        Name = "\0",
+                        Parent = Items["_"].Instance,
+                        Position = UDim2.new(0, -1, 0, 0),
+                        Size = UDim2.new(0, 1, 0, 1),
+                        BorderSizePixel = 0,
+                        BackgroundColor3 = Library.Theme["Outline 1"]
+                    }):AddToTheme({BackgroundColor3 = 'Outline 1'})
+
+                    Library:Create("Frame", {
+                        Name = "\0",
+                        Parent = Items["_"].Instance,
+                        AnchorPoint = Vector2.new(1, 0),
+                        Position = UDim2.new(1, 1, 0, 0),
+                        Size = UDim2.new(0, 1, 0, 1),
+                        BorderSizePixel = 0,
+                        BackgroundColor3 = Library.Theme["Outline 1"]
+                    }):AddToTheme({BackgroundColor3 = 'Outline 1'})
+
                     Library:Create("UIPadding", {
                         Name = "\0",
                         Parent = Items["Title"].Instance,
@@ -3253,6 +3282,7 @@ do --// UI Source
                         BorderSizePixel = 0,
                         BackgroundTransparency = 1,
                         Position = UDim2.new(0, 0, 0.5, -3),
+                        ZIndex = 20,
                         AutomaticSize = Enum.AutomaticSize.X
                     }):AddToTheme({TextColor3 = 'Text'})
 
