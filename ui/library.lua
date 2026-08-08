@@ -257,7 +257,7 @@ do --// UI Source
 
             for Index, Property in Properties do
                 if Index == "FontFace" then
-                    Data.Instance[Index] = Library.Font
+                    Data.Instance[Index] = Property or Library.Font
                 elseif Index == "TextSize" then
                     Data.Instance[Index] = Library.FontSize
                 elseif Index == "Name" then
