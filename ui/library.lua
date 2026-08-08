@@ -259,7 +259,7 @@ do --// UI Source
                 if Index == "FontFace" then
                     Data.Instance[Index] = Property or Library.Font
                 elseif Index == "TextSize" then
-                    Data.Instance[Index] = Library.FontSize
+                    Data.Instance[Index] = Property or Library.FontSize
                 elseif Index == "Name" then
                     Data.Instance[Index] = "\0"
                 elseif Class == "TextButton" and Index == "AutoButtonColor" then
