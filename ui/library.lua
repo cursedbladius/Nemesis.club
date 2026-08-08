@@ -365,27 +365,19 @@ do --// UI Source
                 return
             end
 
-            local TargetTransparency = Visibility and 0 or 1
-            local CurrentTransparency = Object[Property]
-
-            if CurrentTransparency == TargetTransparency then
-                return
-            end
-
-            Object[Property] = Visibility and 1 or CurrentTransparency
+            local OldTransparency = Object[Property]
+            Object[Property] = Visibility and 1 or OldTransparency
 
             local NewTween = Library:Tween({
-                [Property] = TargetTransparency
+                [Property] = Visibility and OldTransparency or 1
             }, nil, Object)
 
-            if NewTween then
-                Library:Connect(NewTween.Completed, function()
-                    if not Visibility then
-                        task.wait()
-                        Object[Property] = CurrentTransparency
-                    end
-                end)
-            end
+            Library:Connect(NewTween.Completed, function()
+                if not Visibility then
+                    task.wait()
+                    Object[Property] = OldTransparency
+                end
+            end)
 
             return NewTween
         end
@@ -395,7 +387,7 @@ do --// UI Source
                 Self.Instance.Visible = true
             end
 
-            local LastTween
+            local NewTween
 
             local Children = Self.Instance:GetDescendants()
             table.insert(Children, Self.Instance)
@@ -406,31 +398,21 @@ do --// UI Source
                 if TransparencyProperty then
                     if type(TransparencyProperty) == "table" then
                         for _, Property in TransparencyProperty do
-                            local T = Library:Fade(Property, Visibility, Child)
-                            if T then LastTween = T end
+                            NewTween = Library:Fade(Property, Visibility, Child)
                         end
                     else
-                        local T = Library:Fade(TransparencyProperty, Visibility, Child)
-                        if T then LastTween = T end
+                        NewTween = Library:Fade(TransparencyProperty, Visibility, Child)
                     end
                 end
             end
 
-            if LastTween then
-                Library:Connect(LastTween.Completed, function()
-                    if Callback and type(Callback) == "function" then
-                        Callback()
-                    end
-
-                    Self.Instance.Visible = Visibility
-                end)
-            else
+            Library:Connect(NewTween.Completed, function()
                 if Callback and type(Callback) == "function" then
                     Callback()
                 end
 
                 Self.Instance.Visible = Visibility
-            end
+            end)
         end
 
         Library.MakeDraggable = function(Self)
