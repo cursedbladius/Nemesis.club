@@ -365,19 +365,27 @@ do --// UI Source
                 return
             end
 
-            local OldTransparency = Object[Property]
-            Object[Property] = Visibility and 1 or OldTransparency
+            local TargetTransparency = Visibility and 0 or 1
+            local CurrentTransparency = Object[Property]
+
+            if CurrentTransparency == TargetTransparency then
+                return
+            end
+
+            Object[Property] = Visibility and 1 or CurrentTransparency
 
             local NewTween = Library:Tween({
-                [Property] = Visibility and OldTransparency or 1
+                [Property] = TargetTransparency
             }, nil, Object)
 
-            Library:Connect(NewTween.Completed, function()
-                if not Visibility then
-                    task.wait()
-                    Object[Property] = OldTransparency
-                end
-            end)
+            if NewTween then
+                Library:Connect(NewTween.Completed, function()
+                    if not Visibility then
+                        task.wait()
+                        Object[Property] = CurrentTransparency
+                    end
+                end)
+            end
 
             return NewTween
         end
@@ -387,7 +395,7 @@ do --// UI Source
                 Self.Instance.Visible = true
             end
 
-            local NewTween
+            local LastTween
 
             local Children = Self.Instance:GetDescendants()
             table.insert(Children, Self.Instance)
@@ -398,21 +406,31 @@ do --// UI Source
                 if TransparencyProperty then
                     if type(TransparencyProperty) == "table" then
                         for _, Property in TransparencyProperty do
-                            NewTween = Library:Fade(Property, Visibility, Child)
+                            local T = Library:Fade(Property, Visibility, Child)
+                            if T then LastTween = T end
                         end
                     else
-                        NewTween = Library:Fade(TransparencyProperty, Visibility, Child)
+                        local T = Library:Fade(TransparencyProperty, Visibility, Child)
+                        if T then LastTween = T end
                     end
                 end
             end
 
-            Library:Connect(NewTween.Completed, function()
+            if LastTween then
+                Library:Connect(LastTween.Completed, function()
+                    if Callback and type(Callback) == "function" then
+                        Callback()
+                    end
+
+                    Self.Instance.Visible = Visibility
+                end)
+            else
                 if Callback and type(Callback) == "function" then
                     Callback()
                 end
 
                 Self.Instance.Visible = Visibility
-            end)
+            end
         end
 
         Library.MakeDraggable = function(Self)
@@ -610,22 +628,23 @@ do --// UI Source
                     h = Minimum.Y
                 end
 
-                Self:Tween({Position = UDim2.fromOffset(x, y)}, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out))
-                Self:Tween({Size = UDim2.fromOffset(w, h)}, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out))
+                Gui.Position = UDim2.fromOffset(x, y)
+                Gui.Size = UDim2.fromOffset(w, h)
             end)
         end
 
         Library.IsMouseOverFrame = function(Self)
             if not Self.Instance then
-                return
+                return false
             end
 
             local Object = Self.Instance
+            local AbsPos = Object.AbsolutePosition
+            local AbsSize = Object.AbsoluteSize
+            local mX, mY = Mouse.X, Mouse.Y
 
-            local MousePosition = Vector2.new(Mouse.X, Mouse.Y)
-
-            return MousePosition.X >= Object.AbsolutePosition.X and MousePosition.X <= Object.AbsolutePosition.X + Object.AbsoluteSize.X
-            and MousePosition.Y >= Object.AbsolutePosition.Y and MousePosition.Y <= Object.AbsolutePosition.Y + Object.AbsoluteSize.Y
+            return mX >= AbsPos.X and mX <= AbsPos.X + AbsSize.X
+            and mY >= AbsPos.Y and mY <= AbsPos.Y + AbsSize.Y
         end
 
         Library.SafeCall = function(Self, Function, ...)
@@ -2920,6 +2939,7 @@ do --// UI Source
                         updateHealth(Health)
                     end)
 
+                    local lastDistance = -1
                     DistanceConnection = RunService.RenderStepped:Connect(function()
                         pcall(function()
                             if not Target or not Target.Character then return end
@@ -2930,7 +2950,10 @@ do --// UI Source
                             local localRoot = LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
                             if not localRoot then return end
                             local Distance = math.floor((localRoot.Position - targetRoot.Position).Magnitude)
-                            Items["Distance"].Instance.Text = Distance .. " st"
+                            if Distance ~= lastDistance then
+                                lastDistance = Distance
+                                Items["Distance"].Instance.Text = Distance .. " st"
+                            end
                         end)
                     end)
                 end
