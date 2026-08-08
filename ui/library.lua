@@ -3204,7 +3204,7 @@ do --// UI Source
                         Parent = Items["MainFrame"].Instance,
                         AnchorPoint = Vector2.new(1, 1),
                         BorderSizePixel = 0,
-                        Position = UDim2.new(1, 2, 0, 0),
+                        Position = UDim2.new(1, 0, 0, 0),
                         Size = UDim2.new(0, 0, 0, 21),
                         ZIndex = -1,
                         AutomaticSize = Enum.AutomaticSize.X,
@@ -3233,7 +3233,7 @@ do --// UI Source
                         Parent = Items["Title"].Instance,
                         AnchorPoint = Vector2.new(0, 1),
                         Position = UDim2.new(0, -8, 1, -2),
-                        Size = UDim2.new(1, 16, 0, 2),
+                        Size = UDim2.new(1, 8, 0, 2),
                         BorderSizePixel = 0,
                         BackgroundColor3 = Library.Theme["Inline"]
                     }):AddToTheme({BackgroundColor3 = 'Inline'})
@@ -3251,7 +3251,7 @@ do --// UI Source
                         Name = "\0",
                         Parent = Items["_"].Instance,
                         AnchorPoint = Vector2.new(1, 0),
-                        Position = UDim2.new(1, 1, 0, 0),
+                        Position = UDim2.new(1, 0, 0, 0),
                         Size = UDim2.new(0, 1, 0, 1),
                         BorderSizePixel = 0,
                         BackgroundColor3 = Library.Theme["Outline 1"]
